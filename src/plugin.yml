@@ -1,0 +1,10 @@
+name: FlamingArrows
+main: daedalus.flamingarrows.FlamingArrows
+version: 1.0
+
+#commands:
+#        description: Position
+#        usage: /pos
+#    debug:
+#        description: Debug
+#        usage: /debug
