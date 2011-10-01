@@ -13,10 +13,30 @@ public class FlamingArrows extends JavaPlugin {
 	Logger log = Logger.getLogger("Minecraft");
 	public Configuration config;
 	public static int ftdivider;
+	protected MySQL sql;
+        protected static Configuration config;
+        private String mysqlServer,mysqlUsername,
+                   mysqlPassword,mysqlPort;
+        public static Logger log;
+    protected String mysqlDatabase,mysqlTableInternal,mysqlTableInput;
+	
+	
 	public void onEnable() { 
 		log.info("[FlamingArrows] v1.0 has been enabled!");
 		log.info("[FlamingArrows] Developed by Daedalus`");
-		setupConfiguration();
+		        // TODO: Place any custom enable code here, such as registering events
+	        config = getConfiguration();
+	        //Set up MySQL
+	        mysqlServer = config.getString("MySQL.Hostname", "localhost");
+	        mysqlDatabase = config.getString("MySQL.Database", "test");
+	        mysqlTableInput = config.getString("MySQL.Tables.SiteInput", "testable");
+	        mysqlTableInternal = config.getString("MySQL.Tables.Internal", "FlamingArrowsInternal");
+	        mysqlUsername = config.getString("MySQL.Username", "root");
+	        mysqlPassword = config.getString("MySQL.Password", "");
+	        mysqlPort = config.getString("MySQL.PortNumber", "3306");
+	        sql = new MySQL(log,"FlamingArrows ",mysqlServer,mysqlPort,mysqlDatabase,mysqlUsername,mysqlPassword);
+	        
+	        config.save();
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PROJECTILE_HIT, entityListener, Event.Priority.Normal, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this);
@@ -40,4 +60,31 @@ public class FlamingArrows extends JavaPlugin {
 		log.info("Your plugin has been disabled.");
 	 
 	}
+	
+	
+	void setProperty(String string, Object data)
+    	{
+	        org.bukkit.util.config.Configuration configuration = getConfig();
+	        configuration.load();
+	        configuration.setProperty(string.toLowerCase(), data);
+	        configuration.save();
+	    	return;
+    	}
+    	
+    	
+        int getInt(String string, int default)
+    	{
+		org.bukkit.util.config.Configuration configuration = getConfig();
+        	configuration.load();
+    		return configuration.getInt(string.toLowerCase(),default);
+    	}
+	
+	String getString(String string, String default)
+    	{
+		org.bukkit.util.config.Configuration configuration = getConfig();
+        	configuration.load();
+    		return configuration.getInt(string.toLowerCase(),default);
+    	}
+	
+	
 }
